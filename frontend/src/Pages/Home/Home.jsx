@@ -12,18 +12,17 @@ const Home = () => {
   }
   const navigate = useNavigate ();
   const startRegister = () => {
-    navigate('/register');
+    navigate('/authenticate');
   }
   return (
     <div className={styles.cardWrapper}>
       <Card title={"Welcome To AVpro!"} icon={"smile"}>
         <p className={styles.text}> Get ready to join the new world. </p>
         <div>
-          <Button onClick={startRegister} text={'Get your Username'} />
+          <Button onClick={startRegister} text={'Lets Go'} />
         </div>
         <div className={styles.signinWrapper}> 
           <span className={styles.hasInvite}>Have an invite text?</span>
-          <Link to="/login" style={signInLink}>Sign in</Link>
         </div>
       </Card>
     </div>
