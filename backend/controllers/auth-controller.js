@@ -24,55 +24,66 @@ class AuthController {
       return res.json({
         hash: `${hash}.${expires}`,
         phone,
-        otp
-      })
+        otp,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "message sending failed" });
     }
   }
 
-  async verifyOtp(req,res){
-    const {otp, hash, phone} = req.body;
-    if(!otp || !hash|| !phone){
-        res.status(400).json({message: 'All fields are required!'});
+  async verifyOtp(req, res) {
+    const { otp, hash, phone } = req.body;
+    if (!otp || !hash || !phone) {
+      res.status(400).json({ message: "All fields are required!" });
     }
 
-    const [hashedOtp, expires] = hash.split('.');
-    if(Date.now() > +expires){
-        res.status(400).json({message: 'OTP expired !'});
+    const [hashedOtp, expires] = hash.split(".");
+    if (Date.now() > +expires) {
+      res.status(400).json({ message: "OTP expired !" });
     }
 
     const data = `${phone}.${otp}.${expires}`;
 
-    const isValid = otpService.verifyOtp(hashedOtp,data);
-    if(!isValid){
-        res.status(400).json({ message: "Invalid OTP" });
+    const isValid = otpService.verifyOtp(hashedOtp, data);
+    if (!isValid) {
+      res.status(400).json({ message: "Invalid OTP" });
     }
-
 
     let user;
 
-    
-    try{
-      user = await userService.findUser({phone: phone});
-      if(!user){
-        user = await userService.createUser({phone: phone});
+    try {
+      user = await userService.findUser({ phone: phone });
+      if (!user) {
+        user = await userService.createUser({ phone: phone });
       }
-    }catch(error){
+    } catch (error) {
       console.log(err);
-      res.status(500).json({message: 'Db error'});
+      res.status(500).json({ message: "Db error" });
     }
 
     // Tokens
-    const {accessToken,refreshToken} = tokenService.generateTokens({_id: user._id, activated: false});
-    res.cookie('refreshtoken',refreshToken,{
-      maxAge: 1000*60*60*24*30, //30 days
-      httpOnly: true
+    const { accessToken, refreshToken } = tokenService.generateTokens({
+      _id: user._id,
+      activated: false,
     });
+
+    await tokenService.storeRefreshToken(refreshToken, user._id);
+
+
+
+    res.cookie("refreshtoken", refreshToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 30, //30 days
+      httpOnly: true,
+    });
+
+    res.cookie("accesstoken", accessToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 30, //30 days
+      httpOnly: true,
+    });
+
     const userDto = new UserDto(user);
-    res.json({accessToken,user: userDto})
-      
+    res.json({user: userDto, auth: true });
   }
 }
 
