@@ -6,64 +6,73 @@ import Authenticate from "./Pages/Authenticate/Authenticate";
 import Activate from "./Pages/Activate/Activate";
 import Rooms from "./Pages/Rooms/Rooms";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
 
 function App() {
+ 
+  // call refresh endpoint
+  const {loading} = useLoadingWithRefresh();
   return (
     <div className="App">
-      <BrowserRouter>
-        <Navigation />
-        <Routes>
-          {/* Guest Routes */}
-          <Route
-            path="/"
-            exact
-            element={
-              <GuestRoute>
-                <Home />
-              </GuestRoute>
-            }
-          />
-          <Route
-            path="/authenticate"
-            element={
-              <GuestRoute>
-                <Authenticate />
-              </GuestRoute>
-            }
-          />
+      {loading ? (
+        "loading...."
+      ) : (
+        <BrowserRouter>
+          <Navigation />
+          <Routes>
+            {/* Guest Routes */}
+            <Route
+              path="/"
+              exact
+              element={
+                <GuestRoute>
+                  <Home />
+                </GuestRoute>
+              }
+            />
+            <Route
+              path="/authenticate"
+              element={
+                <GuestRoute>
+                  <Authenticate />
+                </GuestRoute>
+              }
+            />
 
-          {/* semi protected Area */}
-          <Route
-            path="/activate"
-            element={
-              <SemiProtectedRoute>
-                <Activate />
-              </SemiProtectedRoute>
-            }
-          />
+            {/* semi protected Area */}
+            <Route
+              path="/activate"
+              element={
+                <SemiProtectedRoute>
+                  <Activate />
+                </SemiProtectedRoute>
+              }
+            />
 
-          {/* protected area */}
-          <Route
-            path="/rooms"
-            element={
-              <ProtectedRoute>
-                <Rooms/>
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+            {/* protected area */}
+            <Route
+              path="/rooms"
+              element={
+                <ProtectedRoute>
+                  <Rooms />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      )}
     </div>
   );
 }
 
 const GuestRoute = ({ children, ...rest }) => {
-  const {isAuth}= useSelector((state)=>state.auth)
+  const { isAuth } = useSelector((state) => state.auth);
   return isAuth ? <Navigate to={"/rooms"} /> : children;
 };
 
 const SemiProtectedRoute = ({ children, ...rest }) => {
-  const {isAuth, user}= useSelector((state)=>state.auth)
+  const { isAuth, user } = useSelector((state) => state.auth);
   return !isAuth ? (
     <Navigate to={"/"} />
   ) : isAuth && !user.activated ? (
@@ -73,7 +82,7 @@ const SemiProtectedRoute = ({ children, ...rest }) => {
   );
 };
 const ProtectedRoute = ({ children, ...rest }) => {
-  const {isAuth, user}= useSelector((state)=>state.auth)
+  const { isAuth, user } = useSelector((state) => state.auth);
   return !isAuth ? (
     <Navigate to={"/"} />
   ) : isAuth && !user.activated ? (
