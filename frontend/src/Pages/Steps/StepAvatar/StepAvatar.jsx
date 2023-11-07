@@ -27,6 +27,7 @@ const StepAvatar = () => {
   }
   
   const submit = async() => {
+    if(!name || !avatar) return;
     setLoading(true);
     try{
       // console.log(avatar);
