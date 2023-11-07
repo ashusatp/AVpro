@@ -8,9 +8,11 @@ import { setAvatar } from "../../../Stores/activateSlice";
 import defaultAvatar from "../../../Assets/images/defaultAvatar.png";
 import { activate } from "../../../http";
 import { setAuth } from "../../../Stores/authSlice";
+import Loader from "../../../Components/Shared/Loader/Loader";
 const StepAvatar = () => {
   const { name,avatar } = useSelector((state) => state.activate);
   const [image, setImage] = useState(defaultAvatar);
+  const [loading ,setLoading] = useState(false);
   const dispatch = useDispatch();
   
   const captureImage = (e) =>{
@@ -25,17 +27,23 @@ const StepAvatar = () => {
   }
   
   const submit = async() => {
+    setLoading(true);
     try{
       // console.log(avatar);
       const {data} = await activate({name, avatar});
       if(data.auth){
         dispatch(setAuth(data))
       }
-      console.log(data);
     }catch(error){
       console.log(error);
+    }finally{
+      setLoading(false);
     }
   };
+
+  if(loading){
+    return <Loader message={'Activation in progress'} />
+  }
 
   return (
     <div className={styles.cardWrapper}>
