@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../../../Components/Shared/Card/Card";
 import TextInput from "../../../Components/Shared/TextInput/TextInput";
 import Button from "../../../Components/Shared/Button/Button";
@@ -13,6 +13,7 @@ const StepAvatar = () => {
   const { name,avatar } = useSelector((state) => state.activate);
   const [image, setImage] = useState(defaultAvatar);
   const [loading ,setLoading] = useState(false);
+  const [mounted, setMounted] = useState(true);
   const dispatch = useDispatch();
   
   const captureImage = (e) =>{
@@ -33,7 +34,10 @@ const StepAvatar = () => {
       // console.log(avatar);
       const {data} = await activate({name, avatar});
       if(data.auth){
-        dispatch(setAuth(data))
+        // check if component is unmounted
+        if(mounted){
+          dispatch(setAuth(data))
+        }
       }
     }catch(error){
       console.log(error);
@@ -41,6 +45,12 @@ const StepAvatar = () => {
       setLoading(false);
     }
   };
+
+  useEffect(()=>{
+    return()=>{
+      setMounted(false);
+    }
+  },[])
 
   if(loading){
     return <Loader message={'Activation in progress'} />

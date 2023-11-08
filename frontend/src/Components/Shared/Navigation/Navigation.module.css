@@ -1,6 +1,31 @@
-.navbar{
-    padding: 20px 0;
+.navbar {
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoutButton {
+  background:   #00FFA3;
+  height: 40px;
+  width: 40px;
+  padding: 10px;
+  border-radius: 50%;  
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.logoutButton:hover{
+    background:   #00e15e;
+}
+
+.navRight{
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: center
+}
+.avatar{
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00FFA3;
+    margin: 0 20px;
 }

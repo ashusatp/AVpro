@@ -7,7 +7,7 @@ const twilio = require('twilio')(smsSid,smsAuthToken,{
 })
 class OtpService{
     async generateOtp() {
-        const otp = crypto.randomInt(1000,9999);
+        const otp = crypto.randomInt(10000,99999);
         return otp;
     }
 

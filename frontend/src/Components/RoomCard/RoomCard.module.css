@@ -1,0 +1,54 @@
+.card{
+    background: #4F4F4F4F;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+.card:hover{
+    background:#005eff;
+}
+.topic{
+
+}
+.speakers{
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 20px 0;
+}
+.avatars img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00FFA3;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.avatars{
+
+}
+.avatars img:last-child{
+    top: 20px;
+    left: 20px;
+}
+.avatarNames{
+   margin-left: 100px;
+}
+.avatarNames span{
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-right: 5px;
+}
+.nameWrapper{
+
+}
+.peopleCount{
+   text-align: right; 
+}
+.peopleCount span{
+    font-weight: bold;
+    margin-right: 5px;
+}

@@ -18,6 +18,11 @@ ol, ul {
   list-style: none;
 }
 
+button{
+  border: none;
+  outline: none;
+}
+
 img {
   max-width: 100%;
   height: auto;
