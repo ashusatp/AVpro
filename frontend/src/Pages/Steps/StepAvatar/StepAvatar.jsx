@@ -9,13 +9,14 @@ import defaultAvatar from "../../../Assets/images/defaultAvatar.png";
 import { activate } from "../../../http";
 import { setAuth } from "../../../Stores/authSlice";
 import Loader from "../../../Components/Shared/Loader/Loader";
+import { useNavigate } from "react-router-dom";
 const StepAvatar = () => {
   const { name,avatar } = useSelector((state) => state.activate);
   const [image, setImage] = useState(defaultAvatar);
   const [loading ,setLoading] = useState(false);
   const [mounted, setMounted] = useState(true);
   const dispatch = useDispatch();
-  
+  const navigate = useNavigate();
   const captureImage = (e) =>{
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -39,6 +40,7 @@ const StepAvatar = () => {
           dispatch(setAuth(data))
         }
       }
+      navigate('/rooms');
     }catch(error){
       console.log(error);
     }finally{

@@ -1,80 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Rooms.module.css";
 import searchImg from "../../Assets/images/search.png";
 import startRoomImg from "../../Assets/images/startRoom.png";
 import defaultAvatarImg from "../../Assets/images/defaultAvatar.png";
 import RoomCard from "../../Components/RoomCard/RoomCard";
-const rooms = [
-  {
-    id: 1,
-    topic: "which framework is best for frontend?",
-    speakers: [
-      {
-        id: 1,
-        name: "John Doe",
-        avatar: defaultAvatarImg,
-      },
-      {
-        id: 2,
-        name: "Ashu",
-        avatar: defaultAvatarImg,
-      },
-    ],
-    totalPeople: 40,
-  },
-  {
-    id: 2,
-    topic: "which language is best for backend?",
-    speakers: [
-      {
-        id: 1,
-        name: "John Doe",
-        avatar: defaultAvatarImg,
-      },
-      {
-        id: 2,
-        name: "Ashu",
-        avatar: defaultAvatarImg,
-      },
-    ],
-    totalPeople: 40,
-  },
-  {
-    id: 3,
-    topic: "Blockchain",
-    speakers: [
-      {
-        id: 1,
-        name: "John Doe",
-        avatar: defaultAvatarImg,
-      },
-      {
-        id: 2,
-        name: "Ashu",
-        avatar: defaultAvatarImg,
-      },
-    ],
-    totalPeople: 10,
-  },
-  {
-    id: 4,
-    topic: "which language is best for game development?",
-    speakers: [
-      {
-        id: 1,
-        name: "John Doe",
-        avatar: defaultAvatarImg,
-      },
-      {
-        id: 2,
-        name: "Ashu",
-        avatar: defaultAvatarImg,
-      },
-    ],
-    totalPeople: 20,
-  },
-];
+import AddRoomModel from "../../Components/AddRoomModel/AddRoomModel";
+import { getAllRooms } from "../../http";
 const Rooms = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(()=>{
+    const fetchRooms = async () =>{
+      const {data} = await getAllRooms();
+      setRooms(data);
+    }
+    fetchRooms();
+  },[]);
+
+  const openModal = () =>{
+    setShowModal(true);
+  }
+  const closeModal = () =>{
+    setShowModal(false);
+  }
   return (
     <>
       <div className="container">
@@ -87,7 +36,7 @@ const Rooms = () => {
             </div>
           </div>
           <div className={styles.right}>
-            <button className={styles.startRoomButton}>
+            <button className={styles.startRoomButton} onClick={openModal}>
               <img src={startRoomImg} alt="" width={"20"} />
               <span>start room</span>
             </button>
@@ -99,6 +48,7 @@ const Rooms = () => {
           })}
         </div>
       </div>
+      {showModal && <AddRoomModel closeModal={closeModal}/>}
     </>
   );
 };

@@ -17,6 +17,13 @@
     position: relative;
     margin: 20px 0;
 }
+.singleSpeaker .avatars img{
+    position: initial;
+}
+.singleSpeaker .avatarNames{
+    margin-left: 20px;
+}
+
 .avatars img{
     width: 40px;
     height: 40px;
